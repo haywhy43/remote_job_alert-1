@@ -3,7 +3,7 @@ const validateQueryText = require("../validation/controller");
 const fetch = require("node-fetch");
 const { sendMailForRemoteJob } = require("./user");
 const userModel = require("../models/user");
-const agentModel = require("../models/agent");
+const agentModel = require("../models/newAgent");
 
 const Jobs = {
   async fetchData(req, res) {
@@ -23,6 +23,23 @@ const Jobs = {
     } catch (error) {
       return res.status(400).send(error);
     }
+  },
+  async get_api_jobs(req, res) {
+    let data = await fetch("https://jobs.github.com/positions.json?location=remote");
+    let main = await data.json();
+    return res.status(200).render('jobPage', {
+      content: main,
+      // pages:,
+      size: 7,
+      helpers: {
+          pages: function(index) {
+            for (var index = 1; index < Math.ceil(main.length/7); index++){
+              return index;
+            };
+            
+          }
+        }
+    });
   },
   async create(req, res, next) {
     // // Check Validation

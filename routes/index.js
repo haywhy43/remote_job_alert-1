@@ -81,7 +81,16 @@ router.get('/dashboard', function (req, res, next) {
 router.get('/logout', function(req, res) {
   req.session.destroy();
   //req.logout();
-  res.redirect('/admin');
+  res.redirect('/');
+});
+
+//successful payment
+router.get('/successful-payment', function(req, res) {
+  res.render('payment_success');
+});
+
+router.get('/payment-failed', function(req, res) {
+  res.render('payment_failed');
 });
 
 // Manage jobs page
@@ -147,6 +156,7 @@ router.get('/jobs_api/:job_id', Jobs.fetchSingle);
 /* There is an Error in this route, it is crashing the server */
 //router.post('/jobs', Jobs.validate('create'), Jobs.create);
 router.post('/jobs', Jobs.create);
+router.get("/jobs", Jobs.get_api_jobs);
 
 /////////////////////////////////////////////////
 router.get('/jobs/:job_id', Jobs.get_one);
